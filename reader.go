@@ -59,6 +59,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	//	"strings"
 	"unicode"
 )
 
@@ -130,6 +131,9 @@ type Reader struct {
 	Quote rune
 	// SkipHeader is used to tell the parser to skip the first line of the input
 	SkipHeader bool
+	// TrimTrailingSpace is used to indicate that the parsed field must be trimmed of any extra
+	// spaces at the back
+	TrimTrailingSpace bool
 }
 
 // NewReader returns a new Reader that reads from r.
@@ -291,9 +295,17 @@ func (r *Reader) parseRecord() (fields []string, err error) {
 
 	for i, idx := range r.fieldIndexes {
 		if i == fieldCount-1 {
+			//			if r.TrimTrailingSpace {
+			//				fields[i] = strings.Trim(line[idx:], " ")
+			//			} else {
 			fields[i] = line[idx:]
+			//			}
 		} else {
+			//			if r.TrimTrailingSpace {
+			//				fields[i] = strings.Trim(line[idx:r.fieldIndexes[i+1]], " ")
+			//			} else {
 			fields[i] = line[idx:r.fieldIndexes[i+1]]
+			//			}
 		}
 	}
 
